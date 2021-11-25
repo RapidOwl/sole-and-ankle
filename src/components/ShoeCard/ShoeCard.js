@@ -29,13 +29,37 @@ const ShoeCard = ({
     ? 'on-sale'
     : isNewShoe(releaseDate)
       ? 'new-release'
-      : 'default'
+      : 'default';
+
+  const SalePrice = styled.span`
+    font-weight: ${WEIGHTS.medium};
+    color: ${COLORS.primary};
+  `;
+
+  const Flag = styled.span`
+    background-color: ${() => variant === 'on-sale' ? COLORS.primary : COLORS.secondary};
+    display: ${() => variant !== 'default' ? 'inline' : 'none'};
+    color: ${COLORS.white};
+    padding: 8px 12px;
+    position: absolute;
+    top: 16px;
+    right: -4px;
+  `;
+
+  let flagThing;
+
+  if (variant === 'on-sale')
+    flagThing = <Flag>Sale</Flag>;
+
+  if (variant === 'new-release')
+    flagThing = <Flag>Just released!</Flag>
 
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
+          {flagThing}
         </ImageWrapper>
         <Spacer size={12} />
         <Row>
@@ -44,6 +68,7 @@ const ShoeCard = ({
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
+          {variant === "on-sale" && <SalePrice>{formatPrice(salePrice)}</SalePrice>}
         </Row>
       </Wrapper>
     </Link>
@@ -53,18 +78,25 @@ const ShoeCard = ({
 const Link = styled.a`
   text-decoration: none;
   color: inherit;
+  flex: 1 1 300px;
 `;
 
-const Wrapper = styled.article``;
+const Wrapper = styled.article`
+
+`;
 
 const ImageWrapper = styled.div`
   position: relative;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+  width: 100%;
+`;
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -72,15 +104,14 @@ const Name = styled.h3`
   color: ${COLORS.gray[900]};
 `;
 
-const Price = styled.span``;
+const Price = styled.span`
+  font-weight: ${WEIGHTS.medium};
+`;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
 `;
 
-const SalePrice = styled.span`
-  font-weight: ${WEIGHTS.medium};
-  color: ${COLORS.primary};
-`;
+
 
 export default ShoeCard;
